@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----- Cyber‑luxury dark theme ----- */
+body {
+  @apply bg-[#0A0A0F] text-white;
+  /* ... existing ... */
+}
+@layer base {
+  :root {
+    --neon-gold: #F5C842;
+    --neon-cyan: #00F0FF;
+    --neon-purple: #A855F7;
+    --glass-bg: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.1);
+    --shadow-neon: 0 0 40px rgba(245,200,66,0.15);
+  }
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+    background: #0A0A0F;
+  }
+  body {
+    @apply bg-[#0A0A0F] text-white;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(168,85,247,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(0,240,255,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(245,200,66,0.04) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-white;
+    text-shadow: 0 0 30px rgba(245,200,66,0.1);
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1a1a2e; }
+  ::-webkit-scrollbar-thumb { 
+    background: linear-gradient(180deg, #F5C842, #A855F7);
+    border-radius: 10px;
+  }
+  /* ----- Dark dropdowns for all selects ----- */
+select {
+  background-color: #1a1a2e !important;
+  color: white !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+select option {
+  background-color: #1a1a2e !important;
+  color: white !important;
+}
+select:focus {
+  outline: none !important;
+  ring: 2px solid #F5C842 !important;
+}
+}
+
+/* ----- Glassmorphism components ----- */
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .glass-card {
+    @apply glass rounded-2xl p-6 transition-all duration-500;
+    /* hover effects are applied via component className to avoid @apply conflict */
+  }
+  .btn-neon {
+    @apply relative overflow-hidden px-8 py-4 rounded-full font-semibold text-white transition-all duration-300;
+    background: linear-gradient(135deg, #F5C842, #A855F7);
+    box-shadow: 0 0 30px rgba(245,200,66,0.3);
+  }
+  .btn-neon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-neon:hover::before {
+    opacity: 1;
+  }
+  .btn-neon:hover {
+    @apply scale-105;
+  }
+  .btn-neon:active {
+    @apply scale-95;
+  }
+  .btn-ghost {
+    @apply border border-white/20 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:border-[#F5C842] hover:bg-white/5;
+    /* use arbitrary color for hover border */
+  }
+  .input-neon {
+    @apply w-full px-6 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F5C842]/50 focus:border-transparent transition-all duration-300;
+  }
+}
+
+/* ----- Futuristic animations (unchanged) ----- */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+}
+@keyframes floatX {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(20px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(245,200,66,0.3); }
+  50% { box-shadow: 0 0 60px rgba(245,200,66,0.6); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tilt {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(1deg); }
+  75% { transform: rotate(-1deg); }
+}
+
+.animate-floatY { animation: floatY 4s ease-in-out infinite; }
+.animate-floatX { animation: floatX 5s ease-in-out infinite; }
+.animate-pulseGlow { animation: pulseGlow 2s ease-in-out infinite; }
+.animate-spinSlow { animation: spinSlow 20s linear infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, #1a1a2e 25%, #2a2a3e 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-fadeInDown {
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slideDown {
+  animation: slideDown 0.3s ease forwards;
+}
+.animate-tilt {
+  animation: tilt 6s ease-in-out infinite;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* ----- Hover interactions (now applied as custom utilities) ----- */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 40px rgba(245,200,66,0.2);
+}
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+.glass-card-hover {
+  @apply glass-card;
+}
+.glass-card-hover:hover {
+  border-color: #F5C842;
+  box-shadow: 0 0 50px rgba(245,200,66,0.1);
+}
+
+/* ----- Image protection (keep) ----- */
+.image-protected {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.image-protected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 11px);
+  pointer-events: none;
+  z-index: 10;
+}
+.image-protected:hover { filter: blur(2px); transition: filter 0.3s; }
+.image-protected:active { filter: blur(5px); transition: filter 0.1s; }

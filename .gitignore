@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Env files
+.env
+*/.env
+.env.local
+.env.production
+
+# Build outputs
+build/
+frontend/build/
+dist/
+
+# Uploads (user-uploaded images – Render has ephemeral storage anyway)
+backend/uploads/
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

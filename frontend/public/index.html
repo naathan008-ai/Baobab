@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#c0392b" />
+    <meta
+      name="description"
+      content="Baobab Real Estate – Find your dream home with our expert team."
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Baobab Real Estate</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place bundled scripts into the <body>.
+    -->
+  </body>
+  <div class="futuristic-cursor" id="customCursor"></div>
+<script>
+  const cursor = document.getElementById('customCursor');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest('button, a, .btn-neon, .btn-ghost')) {
+      cursor.style.width = '40px';
+      cursor.style.height = '40px';
+    }
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest('button, a, .btn-neon, .btn-ghost')) {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+    }
+  });
+</script>
+</html>
