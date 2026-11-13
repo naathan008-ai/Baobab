@@ -7,7 +7,7 @@ const defaultSettings = {
   instagram: '',
   linkedin: '',
   youtube: '',
-  tiktok: ''
+  tiktok: '',
 };
 
 let cachedSettings = null;
@@ -24,7 +24,7 @@ export const useSocialSettings = () => {
       return;
     }
     if (fetchPromise) {
-      fetchPromise.then(data => {
+      fetchPromise.then((data) => {
         cachedSettings = data;
         setSettings(data);
         setLoading(false);
@@ -34,13 +34,11 @@ export const useSocialSettings = () => {
     const fetchSettings = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/settings`);
-        // Ensure all fields exist
         const data = { ...defaultSettings, ...res.data };
         cachedSettings = data;
         setSettings(data);
       } catch (error) {
         console.error('Failed to load social settings:', error);
-        // Use defaults on error
         cachedSettings = defaultSettings;
         setSettings(defaultSettings);
       } finally {
@@ -51,4 +49,34 @@ export const useSocialSettings = () => {
   }, []);
 
   return { settings, loading };
+};
+
+/**
+ * Turns whatever the admin typed into a clickable URL.
+ *
+ * Accepts:
+ *   - Full URL:      "https://facebook.com/baobab"  → unchanged
+ *   - @handle:       "@baobab"                      → https://facebook.com/baobab
+ *   - Plain handle:  "baobab"                       → https://facebook.com/baobab
+ *   - Empty:         ""                             → null (icon hidden)
+ */
+export const resolveSocialUrl = (platform, value) => {
+  if (!value) return null;
+  const trimmed = String(value).trim();
+  if (!trimmed) return null;
+
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+  const handle = trimmed.replace(/^@/, '').replace(/^\/+/, '');
+
+  const bases = {
+    facebook: 'https://facebook.com/',
+    twitter: 'https://twitter.com/',
+    instagram: 'https://instagram.com/',
+    linkedin: 'https://linkedin.com/in/',
+    youtube: 'https://youtube.com/@',
+    tiktok: 'https://tiktok.com/@',
+  };
+
+  return (bases[platform] || 'https://') + handle;
 };

@@ -12,44 +12,100 @@ const Team = () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/team`);
         setMembers(res.data);
-      } catch (error) { console.error(error); } finally { setLoading(false); }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchTeam();
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] py-16">
+    <div className="min-h-screen bg-surface-soft py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-serif font-bold bg-gradient-to-r from-neon-gold to-neon-purple bg-clip-text text-transparent">
-            Our Team
-          </h1>
-          <p className="text-white/50 mt-2">Meet the visionaries behind Baobab.</p>
+          <h1 className="text-4xl font-serif font-bold text-ink mb-3">Our Team</h1>
+          <p className="text-lg text-ink-muted max-w-2xl mx-auto">
+            Meet the professionals behind Baobab Real Estate. We're here to help you find your dream home.
+          </p>
         </div>
 
         {loading ? (
-          <div className="text-center text-white/50 py-20">Loading...</div>
+          <div className="text-center py-20 text-ink-muted">Loading team...</div>
+        ) : members.length === 0 ? (
+          <div className="text-center py-20 bg-white rounded-2xl border border-surface-border">
+            <p className="text-ink-muted">Our team details are coming soon.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {members.map((member) => (
-              <div key={member._id} className="glass-card group hover-lift animate-fadeInUp">
-                <div className="relative h-64 overflow-hidden rounded-xl">
-                  <ProtectedImage src={member.photo || '/default-avatar.jpg'} alt={member.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div key={member._id} className="bg-white rounded-2xl shadow-premium overflow-hidden border border-surface-border hover:shadow-premium-lg transition-all group">
+                <div className="relative h-72 overflow-hidden">
+                  <ProtectedImage
+                    src={member.photo || '/default-avatar.jpg'}
+                    alt={member.name}
+                    className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  />
                 </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-white group-hover:text-neon-gold transition">{member.name}</h3>
-                  <p className="text-neon-gold text-sm font-medium">{member.title}</p>
-                  <p className="text-white/60 text-sm mt-2">{member.bio}</p>
-                  <div className="flex flex-wrap gap-2 mt-3 text-sm text-white/50">
-                    {member.email && <a href={`mailto:${member.email}`} className="hover:text-neon-gold transition flex items-center gap-1"><FaEnvelope /> {member.email}</a>}
-                    {member.phone && <a href={`tel:${member.phone}`} className="hover:text-neon-gold transition flex items-center gap-1"><FaPhone /> {member.phone}</a>}
+                <div className="p-6">
+                  <h3 className="text-xl font-serif font-bold text-ink mb-1">{member.name}</h3>
+                  <p className="text-primary font-medium mb-3 text-sm">{member.title}</p>
+                  <p className="text-ink-muted text-sm mb-4 leading-relaxed">{member.bio}</p>
+
+                  <div className="space-y-2 text-sm">
+                    {member.email && (
+                      <a
+                        href={`mailto:${member.email}`}
+                        className="flex items-center text-ink-soft hover:text-primary transition"
+                      >
+                        <FaEnvelope className="mr-2 text-primary" size={12} />
+                        {member.email}
+                      </a>
+                    )}
+                    {member.phone && (
+                      <a
+                        href={`tel:${member.phone}`}
+                        className="flex items-center text-ink-soft hover:text-primary transition"
+                      >
+                        <FaPhone className="mr-2 text-primary" size={12} />
+                        {member.phone}
+                      </a>
+                    )}
                   </div>
-                  {member.socialLinks && (
-                    <div className="flex space-x-3 mt-3 pt-3 border-t border-white/10">
-                      {member.socialLinks.linkedin && <a href={member.socialLinks.linkedin} className="text-white/40 hover:text-neon-gold transition"><FaLinkedin /></a>}
-                      {member.socialLinks.twitter && <a href={member.socialLinks.twitter} className="text-white/40 hover:text-neon-gold transition"><FaTwitter /></a>}
-                      {member.socialLinks.facebook && <a href={member.socialLinks.facebook} className="text-white/40 hover:text-neon-gold transition"><FaFacebook /></a>}
+
+                  {member.socialLinks && (member.socialLinks.linkedin || member.socialLinks.twitter || member.socialLinks.facebook) && (
+                    <div className="flex space-x-3 mt-4 pt-4 border-t border-surface-border">
+                      {member.socialLinks.linkedin && (
+                        <a
+                          href={member.socialLinks.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-muted hover:bg-primary hover:text-white transition"
+                        >
+                          <FaLinkedin size={14} />
+                        </a>
+                      )}
+                      {member.socialLinks.twitter && (
+                        <a
+                          href={member.socialLinks.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-muted hover:bg-primary hover:text-white transition"
+                        >
+                          <FaTwitter size={14} />
+                        </a>
+                      )}
+                      {member.socialLinks.facebook && (
+                        <a
+                          href={member.socialLinks.facebook}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-8 h-8 rounded-full bg-surface-soft flex items-center justify-center text-ink-muted hover:bg-primary hover:text-white transition"
+                        >
+                          <FaFacebook size={14} />
+                        </a>
+                      )}
                     </div>
                   )}
                 </div>

@@ -21,29 +21,23 @@ const AdminLayout = ({ children }) => {
   const isAgent = user?.role === 'agent';
   const perms = user?.permissions || {};
 
-  // ===== Sidebar menu =====
   const menuItems = [
     { icon: FaTachometerAlt, label: 'Dashboard', path: '/admin' },
   ];
 
-  // Properties (admins always; agents only if they have any property permission)
   const agentCanUseProperties =
     isAgent &&
-    (perms.canAddProperties ||
-      perms.canEditProperties ||
-      perms.canDeleteProperties ||
-      perms.canRevalueProperties);
+    (perms.canAddProperties || perms.canEditProperties ||
+     perms.canDeleteProperties || perms.canRevalueProperties);
 
   if (isAdmin || agentCanUseProperties) {
     menuItems.push({ icon: FaHome, label: 'Properties', path: '/admin/properties' });
   }
 
-  // Messages
   if (isAdmin || perms.canViewMessages) {
     menuItems.push({ icon: FaEnvelope, label: 'Messages', path: '/admin/contacts' });
   }
 
-  // Admin-only
   if (isAdmin) {
     menuItems.push(
       { icon: FaUsers, label: 'Users', path: '/admin/users' },
@@ -56,7 +50,6 @@ const AdminLayout = ({ children }) => {
 
   const roleLabel = isAdmin ? 'Administrator' : isAgent ? 'Agent' : 'User';
 
-  // Page title (longest match first)
   const currentItem = [...menuItems]
     .sort((a, b) => b.path.length - a.path.length)
     .find((item) =>
@@ -68,15 +61,21 @@ const AdminLayout = ({ children }) => {
   const isOnDashboard = location.pathname === '/admin';
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white flex">
+    <div className="min-h-screen bg-surface-soft text-ink flex">
       {/* ============ SIDEBAR ============ */}
-      <aside className="w-64 bg-[#0A0A0F] border-r border-white/10 min-h-screen flex flex-col sticky top-0 h-screen">
-        <div className="p-6 border-b border-white/5">
+      <aside className="w-64 bg-white border-r border-surface-border min-h-screen flex flex-col sticky top-0 h-screen">
+        <div className="p-6 border-b border-surface-border">
           <Link to="/admin" className="flex items-center space-x-2 group">
-            <FaBuilding className="text-neon-gold group-hover:scale-110 transition-transform" />
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+              B
+            </div>
             <div>
-              <span className="text-xl font-bold block leading-tight">Baobab</span>
-              <span className="text-xs text-white/40">{roleLabel} Panel</span>
+              <span className="text-lg font-serif font-bold text-primary leading-none block">
+                Baobab
+              </span>
+              <span className="text-[10px] uppercase tracking-widest text-ink-muted">
+                {roleLabel}
+              </span>
             </div>
           </Link>
         </div>
@@ -92,50 +91,50 @@ const AdminLayout = ({ children }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center justify-between px-4 py-3 rounded-lg mb-1 transition group ${
+                className={`flex items-center justify-between px-4 py-2.5 rounded-lg mb-1 transition group text-sm ${
                   active
-                    ? 'bg-gradient-to-r from-neon-gold/20 to-neon-purple/10 text-neon-gold border-l-2 border-neon-gold'
-                    : 'text-white/70 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'text-ink-soft hover:bg-primary-50 hover:text-primary'
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <item.icon
                     className={
                       active
-                        ? 'text-neon-gold'
-                        : 'text-white/40 group-hover:text-neon-gold transition'
+                        ? 'text-white'
+                        : 'text-ink-faint group-hover:text-primary transition'
                     }
                   />
-                  <span className="text-sm">{item.label}</span>
+                  <span>{item.label}</span>
                 </div>
-                {active && <FaChevronRight className="text-xs opacity-60" />}
+                {active && <FaChevronRight className="text-xs opacity-70" />}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10 space-y-2">
+        <div className="p-4 border-t border-surface-border space-y-2">
           <Link
             to="/"
-            className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-white/5 transition text-white/60 hover:text-neon-cyan text-sm"
+            className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-surface-muted transition text-ink-muted hover:text-primary text-sm"
           >
             <FaGlobe />
             <span>View Site</span>
           </Link>
 
-          <div className="flex items-center space-x-3 px-4 py-3 border-t border-white/5 pt-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-gold to-neon-purple flex items-center justify-center text-black text-sm font-bold">
+          <div className="flex items-center space-x-3 px-4 py-3 border-t border-surface-border pt-3">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-sm font-bold">
               {user?.name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-medium text-sm truncate">{user?.name}</p>
-              <p className="text-xs text-white/40 truncate">{user?.email}</p>
+              <p className="font-medium text-sm truncate text-ink">{user?.name}</p>
+              <p className="text-xs text-ink-muted truncate">{user?.email}</p>
             </div>
           </div>
 
           <button
             onClick={handleLogout}
-            className="flex items-center space-x-3 px-4 py-2 w-full rounded-lg hover:bg-red-500/10 transition text-red-400 hover:text-red-300 text-sm"
+            className="flex items-center space-x-3 px-4 py-2 w-full rounded-lg hover:bg-red-50 transition text-danger text-sm"
           >
             <FaSignOutAlt />
             <span>Logout</span>
@@ -143,17 +142,17 @@ const AdminLayout = ({ children }) => {
         </div>
       </aside>
 
-      {/* ============ MAIN AREA ============ */}
+      {/* ============ MAIN ============ */}
       <div className="flex-1 overflow-x-hidden">
-        <div className="sticky top-0 z-40 bg-[#0A0A0F]/95 backdrop-blur border-b border-white/5 px-8 py-3">
+        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-surface-border px-8 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Link
                 to="/admin"
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition text-sm font-medium ${
                   isOnDashboard
-                    ? 'bg-neon-gold text-black shadow-[0_0_20px_rgba(245,200,66,0.4)]'
-                    : 'bg-neon-gold/10 text-neon-gold border border-neon-gold/30 hover:bg-neon-gold hover:text-black'
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'bg-primary-50 text-primary border border-primary-100 hover:bg-primary hover:text-white'
                 }`}
               >
                 <FaTachometerAlt />
@@ -161,22 +160,18 @@ const AdminLayout = ({ children }) => {
               </Link>
 
               {!isOnDashboard && (
-                <div className="hidden md:flex items-center gap-2 text-sm">
-                  <FaChevronRight className="text-white/20 text-xs" />
-                  <span className="text-white/70">{pageTitle}</span>
+                <div className="hidden md:flex items-center gap-2 text-sm text-ink-muted">
+                  <FaChevronRight className="text-ink-faint text-xs" />
+                  <span>{pageTitle}</span>
                 </div>
               )}
             </div>
 
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-white/30 hidden sm:inline">
-                {new Date().toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-              </span>
-            </div>
+            <span className="text-xs text-ink-faint hidden sm:inline">
+              {new Date().toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric',
+              })}
+            </span>
           </div>
         </div>
 

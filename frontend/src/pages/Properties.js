@@ -8,95 +8,157 @@ const Properties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    search: '', propertyType: '', status: '', minPrice: '', maxPrice: '', bedrooms: ''
+    search: '', propertyType: '', status: '', minPrice: '', bedrooms: '',
   });
 
-  useEffect(() => { fetchProperties(); }, [filters]);
+  useEffect(() => {
+    fetchProperties();
+  }, [filters]);
 
   const fetchProperties = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams(filters);
       const res = await axios.get(`${process.env.REACT_APP_API_URL}/properties?${params}`);
-      const data = res.data.map(p => ({ ...p, images: Array.isArray(p.images) ? p.images : [] }));
+      const data = res.data.map((p) => ({ ...p, images: Array.isArray(p.images) ? p.images : [] }));
       setProperties(data);
-    } catch (error) { console.error(error); } finally { setLoading(false); }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFilterChange = (e) => setFilters({ ...filters, [e.target.name]: e.target.value });
-  const handleSearch = (e) => { e.preventDefault(); fetchProperties(); };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchProperties();
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] py-12">
+    <div className="min-h-screen bg-surface-soft py-12">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-serif font-bold bg-gradient-to-r from-neon-gold to-neon-purple bg-clip-text text-transparent mb-8">
-          Our Properties
-        </h1>
+        <div className="mb-8">
+          <h1 className="text-4xl font-serif font-bold text-ink mb-2">Our Properties</h1>
+          <p className="text-ink-muted">Browse our complete collection of available properties.</p>
+        </div>
 
-        {/* Search filters – glass */}
-        <div className="glass rounded-2xl p-6 border border-white/10 shadow-2xl mb-10">
+        {/* Filters */}
+        <div className="bg-white rounded-2xl shadow-premium p-6 border border-surface-border mb-8">
           <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <input type="text" name="search" placeholder="Search..." value={filters.search} onChange={handleFilterChange} className="input-neon" />
-            <select name="propertyType" value={filters.propertyType} onChange={handleFilterChange} className="input-neon appearance-none">
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
+              <input
+                type="text"
+                name="search"
+                placeholder="Search..."
+                value={filters.search}
+                onChange={handleFilterChange}
+                className="input-neon pl-10"
+              />
+            </div>
+            <select
+              name="propertyType"
+              value={filters.propertyType}
+              onChange={handleFilterChange}
+              className="input-neon appearance-none"
+            >
               <option value="">All Types</option>
               <option value="house">House</option>
               <option value="apartment">Apartment</option>
               <option value="land">Land</option>
               <option value="commercial">Commercial</option>
             </select>
-            <select name="status" value={filters.status} onChange={handleFilterChange} className="input-neon appearance-none">
+            <select
+              name="status"
+              value={filters.status}
+              onChange={handleFilterChange}
+              className="input-neon appearance-none"
+            >
               <option value="">All Status</option>
               <option value="available">Available</option>
               <option value="pending">Pending</option>
               <option value="sold">Sold</option>
             </select>
-            <select name="bedrooms" value={filters.bedrooms} onChange={handleFilterChange} className="input-neon appearance-none">
+            <select
+              name="bedrooms"
+              value={filters.bedrooms}
+              onChange={handleFilterChange}
+              className="input-neon appearance-none"
+            >
               <option value="">Bedrooms</option>
               <option value="1">1+</option>
               <option value="2">2+</option>
               <option value="3">3+</option>
               <option value="4">4+</option>
+              <option value="5">5+</option>
             </select>
-            <button type="submit" className="btn-neon w-full">Search</button>
+            <button type="submit" className="btn-neon">
+              Apply Filters
+            </button>
           </form>
         </div>
 
+        {/* Results */}
         {loading ? (
-          <div className="text-center text-white/50 py-20">Loading...</div>
+          <div className="text-center py-20 text-ink-muted">Loading properties...</div>
         ) : properties.length === 0 ? (
-          <div className="text-center text-white/50 py-20">No properties found.</div>
+          <div className="text-center py-20 bg-white rounded-2xl border border-surface-border">
+            <p className="text-lg text-ink-muted">No properties found matching your criteria.</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {properties.map((property) => {
-              const imageUrl = property.images && property.images.length > 0 ? property.images[0] : '/placeholder.jpg';
+              const imageUrl = property.images?.[0] || '/placeholder.jpg';
               return (
-                <div key={property._id} className="glass-card group hover-lift animate-fadeInUp">
+                <div key={property._id} className="glass-card hover-lift group">
                   <div className="relative h-56 overflow-hidden rounded-xl">
-                    <ProtectedImage src={imageUrl} alt={property.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
-                      property.status === 'available' ? 'bg-green-500/80 text-white' :
-                      property.status === 'pending' ? 'bg-yellow-500/80 text-white' :
-                      'bg-gray-500/80 text-white'
-                    }`}>
+                    <ProtectedImage
+                      src={imageUrl}
+                      alt={property.title}
+                      className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                    <span
+                      className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${
+                        property.status === 'available'
+                          ? 'bg-success text-white'
+                          : property.status === 'pending'
+                          ? 'bg-warning text-white'
+                          : 'bg-ink-muted text-white'
+                      }`}
+                    >
                       {property.status}
                     </span>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold text-white group-hover:text-neon-gold transition">{property.title}</h3>
-                    <p className="text-white/60 flex items-center gap-1 text-sm mt-1">
-                      <FaMapMarkerAlt className="text-neon-gold" /> {property.location}
+                  <div className="p-5">
+                    <h3 className="text-lg font-serif font-bold text-ink group-hover:text-primary transition mb-1">
+                      {property.title}
+                    </h3>
+                    <p className="text-ink-muted mb-4 flex items-center text-sm">
+                      <FaMapMarkerAlt className="mr-1.5 text-primary" />
+                      {property.location}
                     </p>
-                    <div className="flex justify-between items-center mt-3">
-                      <span className="text-2xl font-bold text-neon-gold">${property.price.toLocaleString()}</span>
-                      <span className="text-sm text-white/40">{property.areaSqM} m²</span>
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-2xl font-bold text-primary">
+                        ${property.price?.toLocaleString()}
+                      </span>
+                      <span className="text-sm text-ink-muted">{property.areaSqM} m²</span>
                     </div>
-                    <div className="flex justify-between text-white/40 border-t border-white/10 mt-3 pt-3 text-sm">
-                      <span><FaBed className="inline mr-1 text-neon-gold" /> {property.bedrooms}</span>
-                      <span><FaBath className="inline mr-1 text-neon-gold" /> {property.bathrooms}</span>
-                      <span><FaRulerCombined className="inline mr-1 text-neon-gold" /> {property.areaSqM} m²</span>
+                    <div className="flex justify-between text-ink-soft border-t border-surface-border pt-3 text-sm">
+                      <span className="flex items-center">
+                        <FaBed className="mr-1.5 text-primary" /> {property.bedrooms || 0}
+                      </span>
+                      <span className="flex items-center">
+                        <FaBath className="mr-1.5 text-primary" /> {property.bathrooms || 0}
+                      </span>
+                      <span className="flex items-center">
+                        <FaRulerCombined className="mr-1.5 text-primary" /> {property.areaSqM || 0} m²
+                      </span>
                     </div>
-                    <Link to={`/properties/${property.slug}`} className="mt-4 block text-center border border-white/20 rounded-full py-2 text-white/70 hover:text-white hover:border-neon-gold transition-all hover:shadow-[0_0_30px_rgba(245,200,66,0.2)]">
+                    <Link
+                      to={`/properties/${property.slug}`}
+                      className="mt-4 block text-center bg-primary text-white py-2.5 rounded-lg hover:bg-primary-dark transition duration-300 font-medium text-sm"
+                    >
                       View Details
                     </Link>
                   </div>

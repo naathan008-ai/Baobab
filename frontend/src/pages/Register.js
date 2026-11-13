@@ -5,17 +5,20 @@ import { FaUser, FaEnvelope, FaLock, FaPhone, FaEye, FaEyeSlash } from 'react-ic
 import toast from 'react-hot-toast';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', phoneNumber: '', role: 'user' });
+  const [formData, setFormData] = useState({
+    name: '', email: '', password: '', phoneNumber: '', role: 'user',
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Please fill all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
     setLoading(true);
@@ -25,108 +28,115 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden bg-[#0A0A0F]">
-      <div className="absolute inset-0">
-        <div className="absolute top-10 right-10 w-72 h-72 bg-neon-cyan/20 rounded-full filter blur-3xl animate-floatX"></div>
-        <div className="absolute bottom-10 left-10 w-96 h-96 bg-neon-gold/10 rounded-full filter blur-3xl animate-floatY"></div>
-      </div>
-
-      <div className="glass max-w-md w-full p-8 rounded-2xl border border-white/10 shadow-2xl animate-zoomIn">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary/10 flex items-center justify-center py-12 px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-premium-lg p-8 border border-surface-border">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-serif font-bold bg-gradient-to-r from-neon-cyan to-neon-gold bg-clip-text text-transparent">
-            Join the Future
-          </h2>
-          <p className="text-white/50 mt-2">Create your Baobab account</p>
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            B
+          </div>
+          <h2 className="text-2xl font-serif font-bold text-ink">Create Account</h2>
+          <p className="text-ink-muted mt-1 text-sm">Join the Baobab community</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-white/70 mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Full Name *</label>
             <div className="relative">
-              <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+              <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="input-neon pl-12"
-                placeholder="John Doe"
+                className="input-neon pl-10"
+                placeholder="Your full name"
                 required
               />
             </div>
           </div>
+
           <div>
-            <label className="block text-sm text-white/70 mb-1">Email</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Email *</label>
             <div className="relative">
-              <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+              <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="input-neon pl-12"
-                placeholder="john@example.com"
+                className="input-neon pl-10"
+                placeholder="you@example.com"
                 required
               />
             </div>
           </div>
+
           <div>
-            <label className="block text-sm text-white/70 mb-1">Password</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Password *</label>
             <div className="relative">
-              <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="input-neon pl-12 pr-12"
-                placeholder="Min 6 chars"
+                className="input-neon pl-10 pr-10"
+                placeholder="Min 6 characters"
+                minLength="6"
                 required
               />
               <button
                 type="button"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition"
                 onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-primary transition"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
+
           <div>
-            <label className="block text-sm text-white/70 mb-1">Phone (optional)</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Phone Number</label>
             <div className="relative">
-              <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+              <FaPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type="tel"
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="input-neon pl-12"
-                placeholder="+263 77 123 4567"
+                className="input-neon pl-10"
+                placeholder="+263 ..."
               />
             </div>
           </div>
+
           <div>
-            <label className="block text-sm text-white/70 mb-1">Register as</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Register as</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="input-neon appearance-none"
+              className="input-neon"
             >
               <option value="user">User</option>
               <option value="agent">Agent</option>
             </select>
-            <p className="text-xs text-white/30 mt-1">Agents require admin approval.</p>
+            <p className="text-xs text-ink-faint mt-1">
+              Agent accounts require admin approval before access.
+            </p>
           </div>
+
           <button type="submit" disabled={loading} className="btn-neon w-full">
-            {loading ? 'Creating...' : 'Create Account'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
-          <p className="text-white/50">
-            Already have an account? <Link to="/login" className="text-neon-gold hover:underline">Sign In</Link>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-ink-muted">
+            Already have an account?{' '}
+            <Link to="/login" className="text-primary hover:underline font-medium">
+              Sign in here
+            </Link>
           </p>
         </div>
       </div>

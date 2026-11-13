@@ -12,60 +12,45 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setEmail('');
-    setPassword('');
-  }, []);
+  useEffect(() => { setEmail(''); setPassword(''); }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-
+    if (!email || !password) return toast.error('Please fill in all fields');
     setLoading(true);
     const result = await login(email, password);
     setLoading(false);
-
     if (result.success) {
       const role = result.user?.role;
-      // ⚡ Both admins AND agents land on the dashboard
-      if (role === 'admin' || role === 'agent') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+      navigate(role === 'admin' || role === 'agent' ? '/admin' : '/');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-[#0a1628] flex items-center justify-center py-12 px-4 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 relative z-10">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary/10 flex items-center justify-center py-12 px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-premium-lg p-8 border border-surface-border">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-serif font-bold text-white">Welcome Back</h2>
-          <p className="text-gray-300 mt-2">Sign in to your Baobab account</p>
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            B
+          </div>
+          <h2 className="text-2xl font-serif font-bold text-ink">Welcome Back</h2>
+          <p className="text-ink-muted mt-1 text-sm">Sign in to your Baobab account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
+        <form onSubmit={handleSubmit} className="space-y-5" autoComplete="off">
           <input type="text" style={{ display: 'none' }} />
           <input type="password" style={{ display: 'none' }} />
 
           <div>
-            <label className="block text-sm font-medium text-gray-200 mb-2">Email</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Email</label>
             <div className="relative">
-              <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary text-white placeholder-gray-300"
-                placeholder="Enter your email"
+                className="input-neon pl-10"
+                placeholder="you@example.com"
                 required
                 autoComplete="off"
               />
@@ -73,46 +58,42 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-200 mb-2">Password</label>
+            <label className="block text-sm font-medium text-ink-soft mb-2">Password</label>
             <div className="relative">
-              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-12 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary text-white placeholder-gray-300"
-                placeholder="Enter your password"
+                className="input-neon pl-10 pr-10"
+                placeholder="••••••••"
                 required
                 autoComplete="new-password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint hover:text-primary transition"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-secondary to-secondary-dark text-white py-3 rounded-xl hover:scale-105 transition-all duration-300 shadow-lg font-semibold disabled:opacity-50"
-          >
+          <button type="submit" disabled={loading} className="btn-neon w-full">
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-gray-300">
+        <div className="mt-6 text-center space-y-2 text-sm">
+          <p className="text-ink-muted">
             Don't have an account?{' '}
-            <Link to="/register" className="text-secondary hover:text-secondary-light font-medium transition">
+            <Link to="/register" className="text-primary hover:underline font-medium">
               Register here
             </Link>
           </p>
           <p>
-            <Link to="/forgot-password" className="text-gray-400 hover:text-secondary transition text-sm">
+            <Link to="/forgot-password" className="text-ink-faint hover:text-primary transition text-xs">
               Forgot password?
             </Link>
           </p>
