@@ -12,22 +12,41 @@ const propertyRoutes = require('./routes/properties');
 const teamRoutes = require('./routes/team');
 const contactRoutes = require('./routes/contact');
 const settingsRoutes = require('./routes/settings');
-const dashboardRoutes = require('./routes/dashboard'); // NEW
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 const isDev = process.env.NODE_ENV !== 'production';
 
 // ============================================
-// CONNECT TO MONGODB (auto-seeds admin)
+// CONNECT TO MONGODB
 // ============================================
 connectDB();
 
 // ============================================
-// CORS
+// CORS CONFIGURATION (Fixed for Deployment)
 // ============================================
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'https://baobab-sandy.vercel.app', // Your live Vercel URL
+  process.env.FRONTEND_URL // Include environment variable if set
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    } else {
+      console.error(`❌ CORS Blocked: ${origin}`);
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // ============================================
@@ -66,11 +85,11 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ============================================
-// STATIC FILES (uploads) — cross-origin enabled
+// STATIC FILES (uploads)
 // ============================================
 app.use('/uploads', (req, res, next) => {
   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-  res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_URL || '*');
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow images to be viewed from anywhere
   next();
 }, express.static(path.join(__dirname, '..', 'uploads')));
 
@@ -83,7 +102,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/settings', settingsRoutes);
-app.use('/api/dashboard', dashboardRoutes); // NEW
+app.use('/api/dashboard', dashboardRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
