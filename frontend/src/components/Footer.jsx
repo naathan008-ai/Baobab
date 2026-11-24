@@ -16,9 +16,9 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
+            <div className="flex items-center space-x-2 mb-3">
              
-              <span className="text-xl font-serif font-bold text-primary">BAOBAB</span>
+              <span className="text-xl font-serif font-bold text-primary">BAOBAB REAL ESTATE</span>
             </div>
             <p className="text-ink-muted text-sm leading-relaxed">
               Your trusted partner in finding the perfect property in Zimbabwe.
@@ -40,7 +40,7 @@ const Footer = () => {
             <h4 className="text-sm font-bold text-ink mb-4 uppercase tracking-wide">
               Contact
             </h4>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-22 text-sm">
               <li className="flex items-center gap-2 text-ink-muted">
                 <FaPhone className="text-primary" size={12} />
                 <a href="tel:263776891540" className="hover:text-primary transition">263 776 891 540</a>
